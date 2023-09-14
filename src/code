@@ -1,34 +1,40 @@
-#include <Servo.h>
-#include <Pixy2.h>
-Pixy2 pixy;
-int color;
+#include "Servo.h"
+#include "TCS34725.h"
+#include "Wire.h"
 Servo servo;
-int f1=0; int f2=0;
-void setup()
+TCS34725 tcs;
+void setup(void)
 {
   servo.attach(5);
-  Serial.begin(115200);  
-  pixy.init();
+    Serial.begin(115200);
+    Wire.begin();
+    if (!tcs.attach(Wire))
+        Serial.println("ERROR: TCS34725 NOT FOUND !!!");
+    tcs.integrationTime(10); // ms
+    tcs.gain(TCS34725::Gain::X01);
+    // set LEDs...
 }
-
-void loop()
-{ 
-  int i; 
-  pixy.ccc.getBlocks();
-  
-  if (pixy.ccc.numBlocks)
-  {
-    f1=0; f2=0;
-        for (int i=0; i<pixy.ccc.numBlocks; i++)
-        {
-          if (pixy.ccc.blocks[i].m_signature==1)servo.write(55);delay(400); //f1=f1+pixy.ccc.blocks[i].m_width*pixy.ccc.blocks[i].m_height;
-          if (pixy.ccc.blocks[i].m_signature==2)servo.write(105); delay(400);//f2=f2+pixy.ccc.blocks[i].m_width*pixy.ccc.blocks[i].m_height;
+void loop(void)
+{
+    if (tcs.available())
+    {
+        static uint32_t prev_ms = millis();
+       TCS34725::RawData raw = tcs.raw();
+        Serial.print("Raw R      : "); Serial.println(raw.r);
+        Serial.print("Raw G      : "); Serial.println(raw.g);
+        Serial.print("Raw B      : "); Serial.println(raw.b);
+       if(raw.r>raw.b&&raw.r>raw.g){
+        Serial.println("red");
+         servo.write(110);
+         delay(19);
+         tcs.clearInterrupt();
+       
+       }
+       
+       else{
         servo.write(75);
-        delay(100);
-        }
-        //if (f1>f2) servo.write(70);
-        //if (f2>f1) servo.write(130);
-      } 
+        delay(10);
+       }
+        prev_ms = millis();
     }
-   
-
+}

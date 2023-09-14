@@ -11,8 +11,6 @@ At this repository you can see all files of our documentation. you can Look at t
 * the folder `src` contains code of control software for all components which were programmed to participate in the competition
 * the folder `components` contains photos of the components used in the vehicle.
 
-## Introduction
-
 We are *team Alphonse*  
 
 

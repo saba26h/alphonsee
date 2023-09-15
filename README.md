@@ -10,7 +10,7 @@ At this repository you can see all files of our documentation. you can Look at t
 * the folder `schemes` contains a diagrams of the all the elements used in the vehicle and how they connect to each other.
 * the folder `src` contains code of control software for all components which were programmed to participate in the competition
 * the folder `components` contains photos of the components used in the vehicle.
-We are *team Alphonse
+
 
 
 
